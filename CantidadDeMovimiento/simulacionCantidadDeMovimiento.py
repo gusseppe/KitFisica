@@ -1,12 +1,18 @@
 import pygame
 import random
 import math
+from random import randint
+from time import sleep
+from threading import Thread
+import sys
 
 background_colour = (255,255,255)
 (width, height) = (400, 400)
 drag = 0.999
 elasticity = 0.75
 gravity = (math.pi, 0.002)
+
+number_of_particles = 5
 
 def addVectors((angle1, length1), (angle2, length2)):
     x  = math.sin(angle1) * length1 + math.sin(angle2) * length2
@@ -89,7 +95,10 @@ class Particle():
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Cantidad de movimiento')
 
-number_of_particles = 5
+#ver luego
+#number_of_particles = 5
+#my_particles = []
+
 my_particles = []
 
 for n in range(number_of_particles):
@@ -103,17 +112,45 @@ for n in range(number_of_particles):
 
     my_particles.append(particle)
 
+def estadistica():
+
+    sys.stdout.write( '\r{: >3}'.format( "Velocidad : " + str(particle.speed) + " Angulo : " + str(particle.angle) ) )
+    #sys.stdout.write( '  ' )
+    #sys.stdout.write( '\r{: >3}'.format( particle.angle ) )
+    sys.stdout.flush()
+    sleep( 0.05 )
+    
+class RollAnimation ( Thread ):
+    activated = True
+    number = None
+
+    def run ( self):
+        while self.activated:
+            #self.number = randint( 1, 100 )
+            estadistica()
+
 selected_particle = None
 running = True
+#Estadisticas
+
+
+pygame.display.set_caption('Kit de Fisica')
+
+print 'Estadistica:\n'
 while running:
+    #t.start()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             (mouseX, mouseY) = pygame.mouse.get_pos()
+            #print 'Hola'
             selected_particle = findParticle(my_particles, mouseX, mouseY)
         elif event.type == pygame.MOUSEBUTTONUP:
+            t = RollAnimation()
+            t.start()
             selected_particle = None
+            t.activated = False
 
     if selected_particle:
         (mouseX, mouseY) = pygame.mouse.get_pos()

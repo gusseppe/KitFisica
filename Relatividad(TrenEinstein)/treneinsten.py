@@ -1,0 +1,154 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#modulos
+import sys, pygame, math
+from pygame.locals import *
+#contantes
+ANCHO=1094
+ALTO=480
+#--------------------------------------------------
+#funciones
+#-----------------------------------------------------
+def cargar_imagen(filename,transparent=False):
+	try: imagen=pygame.image.load(filename)
+
+	except pygame.error, message:
+		raise SystemExit, message
+
+	imagen=imagen.convert()
+	if transparent:
+		color=imagen.get_at((0,0))
+		imagen.set_colorkey(color, RLEACCEL)
+	return imagen
+#-------------------------------------------------
+#clases
+#--------------------------------------------------			
+class Botton(pygame.sprite.Sprite):
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.imagen=cargar_imagen("../images/botonstart.png")
+		self.rect=self.imagen.get_rect()
+		self.rect.centerx=100
+		self.rect.centery=400
+	def pressed2(self,mouse):
+		if mouse[0]<self.rect.right and mouse[0]> self.rect.left:
+			if mouse[1]> self.rect.top and mouse[1]<self.rect.bottom:
+				print "hola"
+				return True
+		else: return False
+#--------------------------------------------------
+class Bottonp(pygame.sprite.Sprite):
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.imagen=cargar_imagen("images/botonpause.png")
+		self.rect=self.imagen.get_rect()
+		self.rect.centerx=230
+		self.rect.centery=400
+	def pressed2(self,mouse):
+		if mouse[0]<self.rect.right and mouse[0]> self.rect.left:
+			if mouse[1]> self.rect.top and mouse[1]<self.rect.bottom:
+				print "hola"
+				return True
+		else: return False
+#-------------------------------------------------
+class Tren(pygame.sprite.Sprite):
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.imagen=cargar_imagen("images/trenv.png",True)
+		self.rect=self.imagen.get_rect()
+		self.rect.centerx=200
+		self.rect.centery=256
+		self.v_c=0.866
+		self.lactual=self.rect.right-self.rect.left
+		#indicando el tamaño		
+		self.speed=[0.1, 0]
+	def actualizarlon(self):
+		self.lactual=self.rect.right-self.rect.left
+	def efectoLorent(self):
+		centerx=self.rect.centerx;
+		centery=self.rect.centery
+		altura=self.rect.bottom-self.rect.top
+		contsLorentz=1/(math.sqrt(1-(self.v_c*self.v_c)))
+		longitud=(self.rect.right-self.rect.left)/contsLorentz
+		#disminuir la longitud
+		self.imagen = pygame.transform.scale(self.imagen, (int (longitud),int (altura)))
+		self.rect=self.imagen.get_rect()
+		self.rect.centerx=centerx
+		self.rect.centery=centery
+	def actualizar(self,time,desplazarse):
+		if desplazarse==True:
+			self.rect.centerx+=self.speed[0]*time
+		#self.rect.centery+=self.speed[1]*time
+		#---revisando que no se salga del trayecto
+		if self.rect.right >=ANCHO:
+			self.speed[0]=0
+#=------------------------------------------------
+class Puente(pygame.sprite.Sprite):
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.imagen=cargar_imagen("images/puente.png",True)
+		self.rect=self.imagen.get_rect()
+		self.rect.centerx=600
+		self.rect.centery=256
+#--------------------------------------------------
+def main():
+	#creando la pantalla del juego
+	pantalla=pygame.display.set_mode((ANCHO,ALTO))
+	pygame.display.set_caption("Tren de Einsten")
+	fondo=cargar_imagen('images/fondofinal.png')
+	tren=Tren()
+	puente=Puente()
+	start=Botton();
+	pause=Bottonp();
+	#---creando el reloj controlador----
+	reloj=pygame.time.Clock()
+	pressS=0
+	pressP=0
+	primero=0
+	desplazarse=False
+	fuente=pygame.font.Font(None,20)
+	#---bucle para que no se cierre la ventana a menos
+	#que indiquemos con el evento quita
+	while True:
+		time=reloj.tick(60)
+		for eventos in pygame.event.get():
+			if eventos.type == QUIT:
+				sys.exit(0)
+			elif eventos.type == MOUSEBUTTONDOWN:
+				if start.pressed2(pygame.mouse.get_pos()):
+					if pressS==0:
+						desplazarse=True
+						if primero==0:
+							tren.efectoLorent()
+						tren.actualizarlon()
+						pressS=1
+						primero=1
+				if pause.pressed2(pygame.mouse.get_pos()):
+					if pressP==0:
+						desplazarse=False
+						pressS=0
+
+			elif eventos.type == KEYDOWN:
+				if eventos.key==K_UP and desplazarse==False:
+					if tren.v_c <= 1.0:
+						tren.v_c=tren.v_c+0.01
+				elif eventos.key==K_DOWN and desplazarse==False:
+					if tren.v_c >= 0.0:
+						tren.v_c=tren.v_c-0.001
+
+		tren.actualizar(time,desplazarse)
+		datostren = "velocidad relativa a la luz: %f L m/s    lognitud del tren: %d metros    longitud del tunel 141 m" %(tren.v_c,tren.lactual)
+		mensaje1=fuente.render(datostren,1,(255,255,255))		
+		pantalla.blit(fondo, (0,0))
+		pantalla.blit(mensaje1,(1,440))
+		pantalla.blit(tren.imagen, tren.rect)
+		pantalla.blit(puente.imagen, puente.rect)
+		pantalla.blit(start.imagen, start.rect)
+		pantalla.blit(pause.imagen, pause.rect)		
+		pygame.display.flip()
+	return 0
+
+if __name__=='__main__':
+	pygame.init()
+	main()
