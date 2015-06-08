@@ -177,7 +177,7 @@ if __name__ == "__main__":
     def iniciarGravedad():
         os.system("python Gravedad/Gravedad.py 1")
     def iniciarCantidadMov():
-        os.system("python CantidadDeMovimiento/simulacionCantidadDeMovimiento.py 1")
+        os.system("python CantidadDeMovimiento/CantidadDeMovimiento.py 1")
     # creacion de la pantalla
     screen = pygame.display.set_mode((640, 480))
  

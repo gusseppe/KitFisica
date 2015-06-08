@@ -27,7 +27,7 @@ def cargar_imagen(filename,transparent=False):
 class Botton(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.imagen=cargar_imagen("images/botonstart.png")
+		self.imagen=cargar_imagen("../images/botonstart.png")
 		self.rect=self.imagen.get_rect()
 		self.rect.centerx=100
 		self.rect.centery=400

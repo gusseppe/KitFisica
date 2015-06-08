@@ -26,7 +26,7 @@ def cargar_imagen(filename,transparent=False):
 class BottonStart(pygame.sprite.Sprite):
 	def __init__(self,x,y):
 		pygame.sprite.Sprite.__init__(self)
-		self.imagen=cargar_imagen("../images/botonstart.png")
+		self.imagen=cargar_imagen("images/botonstart.png")
 		self.rect=self.imagen.get_rect()
 		self.rect.centerx=x
 		self.rect.centery=y
@@ -90,7 +90,7 @@ def main():
 	#creando la pantalla del juego
 	pantalla=pygame.display.set_mode((ANCHO,ALTO))
 	pygame.display.set_caption("Tiempo de alcance")
-	fondo=cargar_imagen('images/fondoauto.png')
+	fondo=cargar_imagen("images/fondoauto.png")
 	pygame.mixer.music.load("sounds/carrera.mp3")
 	time=0
 	arrancar=False

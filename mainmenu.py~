@@ -171,13 +171,13 @@ class GameMenu():
  
 if __name__ == "__main__":
     def iniciarTiempoEncuentro():
-        os.system("python MRU/tiempoalcance.py 1")
+        os.system("python MRU/TiempoAlcance.py 1")
     def iniciarRelatividad():
         os.system("python Relatividad/TrenEinsten.py 1")
     def iniciarGravedad():
         os.system("python Gravedad/Gravedad.py 1")
     def iniciarCantidadMov():
-        os.system("python CantidadDeMovimiento/simulacionCantidadDeMovimiento.py 1")
+        os.system("python CantidadDeMovimiento/CantidadDeMovimiento.py 1")
     # creacion de la pantalla
     screen = pygame.display.set_mode((640, 480))
  
