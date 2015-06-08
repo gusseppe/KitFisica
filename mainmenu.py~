@@ -171,7 +171,7 @@ class GameMenu():
  
 if __name__ == "__main__":
     def iniciarTiempoEncuentro():
-        os.system("python MRU/TiempoAlcance.py 1")
+        os.system("python MRU/tiempoalcance.py 1")
     def iniciarRelatividad():
         os.system("python Relatividad/TrenEinsten.py 1")
     def iniciarGravedad():
