@@ -128,23 +128,6 @@ for n in range(number_of_particles):
 
          my_particles.append(particle)
 
-#def estadistica():
-
-         #sys.stdout.write( '\r{: >3}'.format( "Velocidad : " + str(particle.speed) + " Angulo : " + str(particle.angle) ) )
-         ##sys.stdout.write( '  ' )
-         ##sys.stdout.write( '\r{: >3}'.format( particle.angle ) )
-         #sys.stdout.flush()
-         #sleep( 0.05 )
-
-#class RollAnimation ( Thread ):
-         #activated = True
-         #number = None
-
-         #def run ( self):
-                  #while self.activated:
-                                ##self.number = randint( 1, 100 )
-                                #estadistica()
-
 def main():
 
     selected_particle = None
@@ -153,12 +136,23 @@ def main():
     #Estadisticas
     pygame.display.set_caption("Cantidad de movimiento")
     fondo=cargar_imagen("images/fondoCantidad.jpg")
+
     #pygame.mixer.music.load("sounds/carrera.mp3")
     time=0
-    arrancar=False
+    #arrancar=False
     press=0
     fuente=pygame.font.Font(None,20)
     reloj=pygame.time.Clock()
+
+    datoTiempo = "Tiempo transcurrido %f s"%(time)
+    datosParticula = "Posicion (x, y): (%4f,%4f) m  Velocidad: %3f m/s Angulo: %f m" %(0,
+            0, 0,0)
+    mensaje1=fuente.render(datosParticula,1,(0,0,0))
+    mensaje3=fuente.render(datoTiempo,1,(0,0,0))
+    pantalla.blit(fondo, (0,0))
+    pantalla.blit(mensaje1,(5,560))
+    pantalla.blit(mensaje3,(5,600))
+
 
     pygame.display.set_caption('Kit de Fisica')
 
@@ -195,14 +189,32 @@ def main():
                 selected_particle.angle = 0.5*math.pi + math.atan2(dy, dx)
                 selected_particle.speed = math.hypot(dx, dy) * 0.1
 
+                datosParticula = "Posicion (x, y): (%4f,%4f) m  Velocidad: %3f m/s Angulo: %f m" %(particle.x,
+                        particle.y, particle.speed,particle.angle)
+                datoTiempo = "Tiempo transcurrido %f s"%(time)
+                mensaje1=fuente.render(datosParticula,1,(0,0,0))
+                mensaje3=fuente.render(datoTiempo,1,(0,0,0))
+                #----------------------------------------------------
+                pantalla.blit(fondo, (0,0))
+                pantalla.blit(mensaje1,(5,560))
+                pantalla.blit(mensaje3,(5,600))
          #screen.fill(background_colour)
+
+         pantalla.blit(fondo, (0,0))
+         datoTiempo = "Tiempo transcurrido %f s"%(time)
+         mensaje1=fuente.render(datosParticula,1,(0,0,0))
+         mensaje3=fuente.render(datoTiempo,1,(0,0,0))
+         pantalla.blit(mensaje1,(5,560))
+         pantalla.blit(mensaje3,(5,600))
 
          for i, particle in enumerate(my_particles):
               particle.move()
               particle.bounce()
               for particle2 in my_particles[i+1:]:
-                            collide(particle, particle2)
-              particle.display()
+                     collide(particle, particle2)
+                     particle.display()
+
+              #datosParticula = "Posicion (x, y): (%4f,%4f) m  Velocidad: %3f m/s Angulo: %f m" %(particle.x,          particle.y, particle.speed,particle.angle)
 
          pygame.display.flip()
 
