@@ -34,7 +34,6 @@ class Botton(pygame.sprite.Sprite):
 	def pressed2(self,mouse):
 		if mouse[0]<self.rect.right and mouse[0]> self.rect.left:
 			if mouse[1]> self.rect.top and mouse[1]<self.rect.bottom:
-				print "hola"
 				return True
 		else: return False
 #--------------------------------------------------

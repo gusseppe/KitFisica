@@ -135,7 +135,7 @@ def main():
 
     #Estadisticas
     pygame.display.set_caption("Cantidad de movimiento")
-    fondo=cargar_imagen("images/fondoCantidad.jpg")
+    fondo=cargar_imagen("images/fondoCantidad.png")
 
     #pygame.mixer.music.load("sounds/carrera.mp3")
     time=0
